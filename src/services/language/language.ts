@@ -16,7 +16,12 @@ export class Language {
 
     async importTexts(lang: string, subPath: string = ''): Promise<void> {
         // Deactivate if no need in dynamic import.
-        const { texts } = await import(/* @vite-ignore */`../../i18n/${lang}/lang${subPath}`);
-        this.texts = texts;
+        try {
+            const { texts } = await import(/* @vite-ignore */`../../i18n/${lang}/lang${subPath}`);
+            this.texts = texts;
+        } catch (err) {
+            this.texts = {};
+            console.error(err);
+        }
     }
 }
