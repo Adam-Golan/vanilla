@@ -6,3 +6,4 @@ export * from './navigation/navigation';
 export * from './OG/OG';
 export * from './state/state';
 export * from './storage/storage';
+export * from './timer/timer';
