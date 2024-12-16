@@ -1,4 +1,5 @@
-import { FooterText } from '@shared/components/link-based/intefaces';
+import { IFooterConfig } from "@shared/modules/footer/types";
 
 export interface BasePageText {
+    FOOTER?: IFooterConfig;
 }

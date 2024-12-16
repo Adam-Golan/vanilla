@@ -1,4 +1,5 @@
 import { IContactUsBlock } from "@pages/contact-us/types";
+import { IFooterConfig } from "@shared/modules/footer/types";
 import { IHeaderText } from "@shared/modules/hero/components/header/lang";
 
 export const contactus = {
@@ -28,5 +29,8 @@ export const contactus = {
             header: 'Carrier Pigeon',
             content: ['🐦 Send your bird to the coordinates: 51.5074° N, 0.1278° W', 'Please note: delivery times may vary depending on pigeon motivation.']
         }
-    ] as IContactUsBlock[]
+    ] as IContactUsBlock[],
+    FOOTER: {
+        copyrights: 'Copyright 2525 Ebenezer Scrooge. All rights reserved.'
+    } as IFooterConfig
 }

@@ -1,5 +1,6 @@
 import { ISeperatorText } from "@shared/components/seperator/lang";
 import { IImageCard } from "@shared/modules/card/lang";
+import { IFooterConfig } from "@shared/modules/footer/types";
 import { IHeaderText } from "@shared/modules/hero/components/header/lang";
 
 export const aboutus = {
@@ -43,4 +44,7 @@ export const aboutus = {
             description: 'Intern, Student, and Teacher'
         }
     ] as IImageCard[],
+    FOOTER: {
+        copyrights: 'Copyright 2525 Ebenezer Scrooge. All rights reserved.'
+    } as IFooterConfig
 }

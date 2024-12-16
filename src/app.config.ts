@@ -1,5 +1,4 @@
 import { Home, AboutUs, ContactUs} from "@pages"
-import { IFooterConfig } from "@shared/modules/footer/types";
 import type { IMetaTags, OGCard} from "@services"
 import type { IPage, IPages } from "@services/navigation/types";
 
@@ -14,7 +13,7 @@ export const appConfig: AppConfig = {
         description: "Welcome to Vanilla, a fast and reliable web development frame.",
         keywords: "Vanilla, framework, fast development",
         author: "Adam Golan"
-    }
+    },
 }
 
 interface AppConfig {
@@ -22,5 +21,4 @@ interface AppConfig {
     routes: IPages,
     meta: IMetaTags,
     OGCard?: OGCard,
-    footer?: IFooterConfig
 }
