@@ -1,5 +1,4 @@
 import { ISeperatorText } from "@shared/components/seperator/lang";
-import { ISoonText } from "@shared/components/soon/lang";
 import { IImageCard } from "@shared/modules/card/lang";
 import { IHeaderText } from "@shared/modules/hero/components/header/lang";
 
@@ -44,7 +43,4 @@ export const aboutus = {
             description: 'Intern, Student, and Teacher'
         }
     ] as IImageCard[],
-    SOON: {
-        pageName: 'about us'
-    } as ISoonText,
 }
