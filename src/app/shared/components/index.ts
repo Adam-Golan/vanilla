@@ -9,6 +9,7 @@ export * from './link';
 export * from './loader';
 export * from './progress';
 export * from './rating';
+export * from './seperator';
 export * from './soon';
 export * from './tester';
 export * from './toast';
