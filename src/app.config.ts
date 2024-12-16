@@ -1,4 +1,4 @@
-import { Home, AboutUs} from "@pages"
+import { Home, AboutUs, ContactUs} from "@pages"
 import { IFooterConfig } from "@shared/modules/footer/types";
 import type { IMetaTags, OGCard} from "@services"
 import type { IPage, IPages } from "@services/navigation/types";
@@ -7,6 +7,7 @@ export const appConfig: AppConfig = {
     siteURL: 'https://your-site.com', // Replace with your site's actual URL
     routes: new Map<string, IPage>([
         ['/home', Home],
+        ['/contact-us', ContactUs],
         ['/about-us', AboutUs],
     ]),
     meta: {

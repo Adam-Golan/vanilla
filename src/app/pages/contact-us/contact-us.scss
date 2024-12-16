@@ -1,0 +1,39 @@
+contactus-page#contactus {
+  .fluid {
+    padding-block: 1rem;
+    justify-content: space-evenly;
+  }
+  .intro {
+    margin: 1rem auto;
+    padding-block: 1rem;
+    width: 50%;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+  .form {
+    width: 50%;
+  }
+  .contact-method {
+    padding: 1rem;
+    width: 50%;
+    border-bottom: 2px solid var(--trans-color-medium);
+    *:not(:last-of-type) {
+      user-select: all;
+    }
+    h3 {
+      text-align: center;
+      border-top: 2px solid var(--trans-color-medium);
+      border-bottom: 2px solid var(--trans-color-medium);
+    }
+    a {
+      background: var(--bg);
+      color: var(--color);
+
+      &:hover {
+        scale: 1;
+        box-shadow: none;
+        text-decoration: underline;
+      }
+    }
+  }
+}
