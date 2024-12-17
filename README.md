@@ -12,6 +12,14 @@ Whether you’re starting small or scaling big, Vanilla is your trusted frame to
 
 **Vanilla, code once.**
 
+**package includes**
+- Decorators.
+- Core Services -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + Device, Language, storage, timer.
+- Pages -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + About us, Contact us.
+- Modules -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + Card, Form, Table.
+- Components -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + Badge, Code, Collapsible, Dialogs, Progress, Rating, Soon, Toast.
+- Playground.
+
 ## Run Locally
 
 Clone the project
@@ -38,24 +46,3 @@ Use [playground](./src/playground.ts) if you want to experiment
 ```bash
   npm run playground
 ```
-
-## Vanillite
-**includes**
-- Decorators.
-- Core Services -> API, meta, Navigation, OG, state, sitemap.
-- Pages -> Home with a counter.
-- Modules -> Navbar, Footer, Hero.
-- Components -> Adder, Avatar, Fluid, Link, Loader, Modal, Tester, Seperator, Tooltip, Top.
-- Playground.
-## Vanilla
-**includes**
-- Decorators.
-- Core Services -> Vanillite + Device, Language, storage, timer.
-- Pages -> Vanillite + About us, Contact us.
-- Modules -> Vanillite + Card, Form, Table.
-- Components -> Vanillite + Badge, Code, Collapsible, Dialogs, Progress, Rating, Soon, Toast.
-- Playground.
-## Vanillarge
-**includes**
-- A complete mechanism dedicated for micro frontend.
-- Vanilla complete pack + Unit tests.
