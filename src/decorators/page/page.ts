@@ -21,7 +21,7 @@ export abstract class Page<IText extends BasePageText = any> extends Basis<IText
     // Declaring layout type.
     layout: LayoutType = 'single_column';
     // Declaring optional navigation.
-    private navigation?: Navigation;
+    navigation?: Navigation;
 
     private footer?: Footer;
 
