@@ -69,7 +69,7 @@ export class Navigation {
     }
 
     private loadingProcess(path: string): void {
-        if (location.pathname === path) return;
+        if (path.slice(1).remove('-') === this.currentPage?.id) return;
         // this.log('loadingProcess', path);
         this.pushState(path);
         try {
