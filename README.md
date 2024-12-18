@@ -14,10 +14,10 @@ Whether you’re starting small or scaling big, Vanilla is your trusted frame to
 
 **package includes**
 - Decorators.
-- Core Services -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + Device, Language, storage, timer.
-- Pages -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + About us, Contact us.
-- Modules -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + Card, Form, Table.
-- Components -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) + Badge, Code, Collapsible, Dialogs, Progress, Rating, Soon, Toast.
+- Core Services -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) services + Device, Language, storage, timer.
+- Pages -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) services + About us, Contact us.
+- Modules -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) services + Card, Form, Table.
+- Components -> [Vanillite](https://github.com/Adam-Golan/vanillite/blob/main/README.md) services + Badge, Code, Collapsible, Dialogs, Progress, Rating, Soon, Toast.
 - Playground.
 
 ## Run Locally
