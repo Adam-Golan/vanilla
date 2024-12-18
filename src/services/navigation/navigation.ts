@@ -19,12 +19,12 @@ export class Navigation {
 
     constructor(private state: State, private ref: HTMLElement, private _pages: IPages, private homePage = '/home', public basePath = '/') {
         window.addEventListener('popstate', () => {
+            if (location.hash.length) return;
             this.history[this.history.length - 2]
                 ? this.loadingProcess(this.history[this.history.length - 2])
                 : this.fisrtLoad();
         });
-        window.addEventListener('hashchange', () => history.replaceState(null, '', window.location.pathname), { once: true });
-        // this.buildTreeMap();
+        window.addEventListener('hashchange', () => history.replaceState(null, '', window.location.pathname));
         this.subscribes();
     }
 
