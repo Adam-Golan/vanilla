@@ -8,13 +8,13 @@ import './extender.scss';
 export class Extender<T extends HTMLElement> extends Component<T[]> {
     dropdown: MenuDropdown<T>;
 
-    constructor(protected list: T[], protected type: ExtenderType) {
+    constructor(protected list: T[], protected type: ExtenderType | string) {
         super(list);
         this.classList.add('extender');
-        if(this.type.match(/(caret|dots)/))this.classList.add(...this.type.split(' '));
+        if (this.type.match(/(caret|dots)/)) this.classList.add(...this.type.split(' '));
         this.onclick = () => this.dropdown.toggle();
     }
-    
+
     protected init(): void {
         this.dropdown = new MenuDropdown<T>(this.list);
         if (!this.type.match(/(caret|dots)/)) {
