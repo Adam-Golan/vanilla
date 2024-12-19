@@ -4,7 +4,8 @@ import { Language } from "@services/utils/language/language";
 import type { Page } from "@decorators";
 import type { State } from "@services/state/state";
 import { StateKeys } from "@constants/stateKeys.constant";
-import { IPage, IPages, IPagesTree } from "./types";
+import { IPages, IPagesTree } from "./types";
+import { appConfig } from "app.config";
 
 export class Navigation {
     private loader = new Loader({});
@@ -92,7 +93,7 @@ export class Navigation {
     private navigationLogic(path: string): void {
         path = this.findPage(path);
         // this.log('navigationLogic', path);
-        document.title = `Vanilla | ${(path).slice(1).addSpaces('-').titleCase()}`;
+        document.title = `${appConfig.siteURL.replace(/(https?:\/\/|www\.)/, '').sliceFrom('.').titleCase()} | ${(path).slice(1).addSpaces('-').titleCase()}`;
         if (this.cachedPages.has(path)) {
             this.currentPage = this.cachedPages.get(path)!;
             this.ref.replaceChild(this.currentPage, this.loader);
