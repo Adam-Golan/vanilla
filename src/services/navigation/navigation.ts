@@ -15,14 +15,16 @@ export class Navigation {
     private history: string[] = [];
     public tree: IPagesTree;
 
+    /**
+     * Constructor for Navigation.
+     *
+     * @param state The state object that handles all state changes.
+     * @param ref The root element of the application.
+     * @param pages The list of pages to be used in the navigation.
+     * @param homePage The path to the home page (default is '/home').
+     * @param basePath The base path for all navigation (default is '/').
+     */
     constructor(private state: State, private ref: HTMLElement, private pages: IPages, private homePage = '/home', public basePath = '/') {
-        window.addEventListener('popstate', () => {
-            if (location.hash.length) return;
-            this.history[this.history.length - 2]
-                ? this.loadingProcess(this.history[this.history.length - 2])
-                : this.fisrtLoad();
-        });
-        window.addEventListener('hashchange', () => history.replaceState(null, '', window.location.pathname));
         this.tree = this.createTree();
         this.subscribes();
     }
@@ -30,13 +32,36 @@ export class Navigation {
     // ------------------------------
     // Initiation section.
     // ------------------------------
+
+    /**
+     * Subscribes to the state events.
+     *
+     * Page Navigation - listen to the StateKeys.navigate event and call the loadingProcess function with the given path.
+     * Load Page - listen to the StateKeys.contentReady event and replace the loader with the loaded page.
+     * History - listen to the popstate event and go to the previous page if it exists.
+     * Hashchange - listen to the hashchange event and replace the state with the new path.
+     */
     private subscribes(): void {
         // Page Navigation.
         this.state.subscribe(StateKeys.navigate, (path) => this.loadingProcess(path));
         // Load Page.
         this.state.subscribe(`${this.basePath}:${StateKeys.contentReady}`, () => this.ref.replaceChild(this.currentPage, this.loader));
+        window.addEventListener('popstate', () => {
+            if (location.hash.length) return;
+            this.history[this.history.length - 2]
+                ? this.loadingProcess(this.history[this.history.length - 2])
+                : this.fisrtLoad();
+        });
+        window.addEventListener('hashchange', () => history.replaceState(null, '', window.location.pathname));
     }
 
+    /**
+     * Creates a tree structure for the pages based on the provided pages object.
+     * Each key in the object is a page, and the value is either the path to the page or another object containing the subpages.
+     * The returned tree is an array of strings and objects, where each string is a page path, and each object is a page with its subpages.
+     * @param pages - The pages object to create the tree from. Defaults to the pages object provided in the constructor.
+     * @returns The tree structure for the pages.
+     */
     private createTree(pages: IPages = this.pages): IPagesTree {
         const tree: IPagesTree = [];
         pages.forEach((value, key) => {
@@ -50,11 +75,23 @@ export class Navigation {
     // ------------------------------
     // Texts handles.
     // ------------------------------
+    /**
+     * Imports the language texts using the device language.
+     * Initializes the page loading process after importing the texts.
+     * @returns A promise that resolves once the texts have been imported and the page is initialized.
+     */
     public async importTexts(): Promise<void> {
         await this.i18n.importTexts(Device.lang);
         this.fisrtLoad();
     }
 
+    /**
+         * Sets the texts for the current page.
+         * @param texts - The texts for the current page.
+         * @remarks
+         * This method is useful when you want to set the texts for the current page manually.
+         * It will replace the current texts with the new ones and call the navigation logic to reload the page.
+    */
     public setTexts(texts: any): void {
         this.i18n.texts = texts;
         this.fisrtLoad();
@@ -63,11 +100,24 @@ export class Navigation {
     // ------------------------------
     // Loading section.
     // ------------------------------
+    /**
+     * Reloads the current page.
+     * Replaces the current page with the loader element and calls the navigation logic with the current path.
+     * @remarks
+     * This method is useful when you want to reload the page without pushing a new state to the browser's history.
+     */
     public reload(): void {
         this.ref.replaceChild(this.loader, this.currentPage);
         this.navigationLogic(location.pathname);
     }
 
+    /**
+     * Initializes the loading process of the page.
+     * If the current path is the base path, it pushes the home page to the history.
+     * Removes all children of the ref element except the navbar.
+     * Appends the loader to the ref.
+     * Calls the navigation logic with the current path.
+     */
     private fisrtLoad(): void {
         // this.history = [];
         if (location.pathname === this.basePath) this.pushState(this.homePage);
@@ -77,6 +127,15 @@ export class Navigation {
         this.navigationLogic(location.pathname);
     }
 
+    /**
+     * Loads the page by given path.
+     * If the page with given path is already loaded, it does nothing.
+     * If the page with given path is not found, it loads the homepage.
+     * If the page with given path is not cached, it creates a new instance
+     * of the page and caches it.
+     * It also updates the browser's address bar and the page's title.
+     * @param path - The path to navigate to.
+     */
     private loadingProcess(path: string): void {
         if (path.slice(1).remove('-') === this.currentPage?.id) return;
         // this.log('loadingProcess', path);
@@ -90,6 +149,13 @@ export class Navigation {
         }
     }
 
+    /**
+     * Navigates to the given path by setting the page's title and content.
+     * If the page is already cached, it simply replaces the current page
+     * with the cached one. If the page is not cached, it creates a new instance
+     * of the page and caches it.
+     * @param path - The path to navigate to.
+     */
     private navigationLogic(path: string): void {
         path = this.findPage(path);
         // this.log('navigationLogic', path);
@@ -110,6 +176,15 @@ export class Navigation {
     // ------------------------------
     // Utilities.
     // ------------------------------
+    /**
+     * Searches for the given path in the tree of pages and returns the full path
+     * if the path is found, otherwise returns null.
+     * 
+     * @param path - The path to be searched.
+     * @param tree - The tree of pages to search in. Defaults to the tree of pages
+     *              provided during construction.
+     * @returns The full path if the path is found, otherwise null.
+     */
     private searchFullPath(path: string, tree = this.tree): string | null {
         // this.log('searchPath', path);
         const fullPath: string[] = [];
@@ -124,6 +199,13 @@ export class Navigation {
         return fullPath.length ? fullPath.join('') : null;
     }
 
+    /**
+     * Determines the appropriate page path based on the provided path.
+     * 
+     * @param path - The URL path to be evaluated.
+     * @returns The first matching sub-path from the pages or the home page
+     *          if no match is found or if the path equals the base path.
+     */
     private findPage(path: string): string {
         // this.log('findPage', path);
         if (path === this.basePath) return this.homePage;
@@ -132,11 +214,22 @@ export class Navigation {
         return this.homePage;
     }
 
+    /**
+     * Pushes the given path to the browser's navigation history and updates the URL
+     * in the browser's address bar. This method is called by the loadingProcess method
+     * and should not be called directly.
+     * @param path - The path to push to the navigation history.
+     */
     private pushState(path: string): void {
         this.history.push(path);
         window.history.pushState(null, '', `${this.basePath === '/' ? '' : this.basePath}${path}`);
     }
 
+    /**
+     * Logs information about the navigation process for debugging purposes.
+     * @param fnName The name of the function that calls this method.
+     * @param path The path being navigated to.
+     */
     private log(fnName: string, path: string): void {
         console.log('base path: ', this.basePath, `\n${fnName}: `, path, '\n-----------------------------');
     }
