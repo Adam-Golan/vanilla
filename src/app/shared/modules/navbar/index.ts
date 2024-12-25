@@ -19,8 +19,12 @@ export class Navbar extends Module<IPagesTree> {
     }
 
     protected init() {
-        this.createLinks();
-        this.linkGenerator();
+        this.linksCreator();
+        if (!this.links.length) {
+            document.documentElement.style.setProperty('--pageBlockPad', '0');
+            this.remove();
+        };
+        this.linksRenderer();
         // this.createLogo();
         // this.createLogin();
         if (window.screen.width <= 480) this.createHamburger();
@@ -30,7 +34,8 @@ export class Navbar extends Module<IPagesTree> {
         this.parentState.subscribe(StateKeys.navigate, this.setActive.bind(this));
     }
 
-    private createLinks(arrRef = this.links, pages = this.pages): void {
+    private linksCreator(arrRef = this.links, pages = this.pages): void {
+        if (Array.from(pages).length === 1) return;
         for (const page of pages) {
             if (typeof page === 'string') {
                 const text = page.slice(1).addSpaces('uppercase').titleCase();
@@ -38,7 +43,7 @@ export class Navbar extends Module<IPagesTree> {
             } else {
                 Object.keys(page).forEach(key => {
                     const subLink: MenuItem[] = [];
-                    this.createLinks(subLink, page[key]);
+                    this.linksCreator(subLink, page[key]);
                     arrRef.push(new Extender<MenuItem>(subLink, key.slice(1)));
                 });
             }
@@ -49,7 +54,7 @@ export class Navbar extends Module<IPagesTree> {
         return typeof item === 'object' && 'text' in item && 'href' in item;
     }
 
-    private linkGenerator(): void {
+    private linksRenderer(): void {
         const container = this.cElem('div');
         container.className = 'links';
         container.append(...this.links);
