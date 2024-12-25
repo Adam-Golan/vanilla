@@ -1,4 +1,7 @@
 import './style/dist/style.css';
+import { Navigation } from '@services';
+console.log(Navigation);
+
 // Playground
 import { Link } from "@shared";
 import { ILink } from '@shared/components/link/types';
