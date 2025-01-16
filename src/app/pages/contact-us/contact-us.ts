@@ -22,15 +22,11 @@ export class ContactUs extends Page<typeof texts.contactus> {
 
     private createBlocks(fluid: Fluid): void {
         for (const block of this.texts.BLOCKS) {
-            const conatainer = this.createContainer('contact-method');
-            const header = this.cElem('h3');
+            const [conatainer, header] = this.cAlot([{ tag: 'div', cls: 'contanier contact-method' }, { tag: 'h3' }]);
             header.innerText = block.header;
-            conatainer.append(header);
-            for (const content of block.content) {
-                const para = this.cElem('p');
-                para.innerHTML = content;
-                conatainer.append(para);
-            }
+            const paras = this.cAlot(block.content.map(() => ({ tag: 'p' })));
+            for (let idx = 0; idx < block.content.length; idx++) paras[idx].innerHTML = block.content[idx];
+            conatainer.append(header, ...paras);
             fluid.append(conatainer);
         }
     }
