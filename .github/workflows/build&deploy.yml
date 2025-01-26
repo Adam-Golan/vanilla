@@ -3,49 +3,43 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main # Trigger this workflow on push to the 'main' branch
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    # Step 1: Checkout repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive  # Ensure submodules are initialized
 
-      # Step 2: Set up Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20 # Adjust the Node.js version as needed
+    # Step 2: Set up Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
 
-      # Step 3: Initiate submodules
-      - name: Initiate submodules
-        run:
-          git submodule update --init --recursive
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: npm install
 
-      # Step 4: Install dependencies for submodules
-      - name: Install submodule dependencies
-        run: |
-          git submodule foreach --recursive 'npm install || true'
+    # Step 4: Build the project
+    - name: Build the project
+      run: npm run build
 
-      # Step 5: Install dependencies
-      - name: Install dependencies
-        run: npm install --recursive
+    # Step 5: Inspect dist folder
+    - name: Inspect dist folder
+      run: |
+        ls -la dist
+        echo "Deployment folder content verified."
 
-      # Step 6: Run build script
-      - name: Run build script
-        run: npm run build
-
-      # Step 7: Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist # Directory to deploy, adjust if necessary
-          force_orphan: true
+    # Step 6: Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Use PAT
+        publish_dir: dist
+        force_orphan: true  # Clean push
