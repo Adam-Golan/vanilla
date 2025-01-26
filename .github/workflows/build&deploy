@@ -20,15 +20,19 @@ jobs:
       with:
         node-version: 22  # Adjust the Node.js version as needed
 
-    # Step 3: Install dependencies
-    - name: Install dependencies
-      run: npm install
+    # Step 3: Initiate submodules
+    - name: Initiate submodules
+      run: npm run initiate
 
-    # Step 4: Run build script
+    # Step 4: Install dependencies
+    - name: Install dependencies
+      run: npm install --recursive
+
+    # Step 5: Run build script
     - name: Run build script
       run: npm run build
 
-    # Step 5: Deploy to GitHub Pages
+    # Step 6: Deploy to GitHub Pages
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
