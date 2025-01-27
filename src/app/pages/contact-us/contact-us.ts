@@ -1,5 +1,5 @@
 import { Page, PageDecorator } from "@decorators";
-import type { texts } from "@i18n/en/lang";
+import type { texts } from "assets/i18n/en/lang";
 import { Fluid, Form } from "@shared";
 import { Header } from "@shared/modules/hero/components";
 import { IFormMap, IFormBtns } from "@shared/modules/form/interfaces";

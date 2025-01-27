@@ -3,7 +3,7 @@ import { Enlist, addMeta } from "@decorators/utils";
 import { type Navigation, State } from "@services";
 import { StateKeys } from "@constants/stateKeys.constant";
 import { LayoutType } from "@decorators/types";
-import { BasePageText } from "@i18n/interfaces";
+import { BasePageText } from "assets/i18n/interfaces";
 import { Footer } from "@shared";
 
 /**
@@ -61,8 +61,8 @@ export abstract class Page<IText extends BasePageText = any> extends Basis<IText
     protected showPage(path = '/'): void {
         this.appState.publish(`${path}:${StateKeys.contentReady}`);
         if (this.texts.FOOTER) {
-           this.footer = new Footer(this.texts.FOOTER, this.appState);
-           this.append(this.footer);
+            this.footer = new Footer(this.texts.FOOTER, this.appState);
+            this.append(this.footer);
         }
     }
 }
