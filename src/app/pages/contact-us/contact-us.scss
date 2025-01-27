@@ -14,13 +14,15 @@ contactus-page#contactus {
     --width: 45%;
     padding: 1rem;
     width: var(--width);
-    @media (max-width: 480px) {
-      --width: 75%;
-    }
     height: fit-content;
     border-bottom: 2px solid var(--trans-color-medium);
     *:not(:last-of-type) {
       user-select: all;
+    }
+    & {
+      @media (max-width: 480px) {
+        --width: 75%;
+      }
     }
     h3 {
       text-align: center;
