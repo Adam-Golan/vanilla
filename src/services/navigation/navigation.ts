@@ -159,7 +159,7 @@ export class Navigation {
     private navigationLogic(path: string): void {
         path = this.findPage(path);
         // this.log('navigationLogic', path);
-        document.title = `${appConfig.siteURL.replace(/(https?:\/\/|www\.)/, '').sliceFrom('.').titleCase()} | ${(path).slice(1).addSpaces('-').titleCase()}`;
+        document.title = `${appConfig.siteURL.replace(/(https?:\/\/|www\.)/, '').sliceTo('.').titleCase()} | ${(path).slice(1).addSpaces('-').titleCase()}`;
         if (this.cachedPages.has(path)) {
             this.currentPage = this.cachedPages.get(path)!;
             this.ref.replaceChild(this.currentPage, this.loader);
