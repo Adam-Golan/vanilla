@@ -1,5 +1,5 @@
 // Activate if no need in dynamic import.
-// import { texts } from '../../i18n/en/lang';
+// import { texts } from '../../../asstets/i18n/en/lang';
 
 export class Language {
     texts: any;
@@ -17,7 +17,7 @@ export class Language {
     async importTexts(lang: string, subPath: string = ''): Promise<void> {
         // Deactivate if no need in dynamic import.
         try {
-            const { texts } = await import(/* @vite-ignore */`../../../i18n/${lang}/lang${subPath}`);
+            const { texts } = await import(/* @vite-ignore */`../../../assets/i18n/${lang}/lang${subPath}`);
             this.texts = texts;
         } catch (err) {
             this.texts = {};
