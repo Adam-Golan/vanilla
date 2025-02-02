@@ -1,5 +1,6 @@
 // Activate if no need in dynamic import.
 // import { texts } from '../../../asstets/i18n/en/lang';
+const languages = import.meta.glob('../../../../dist/lang/*/lang.js');
 
 export class Language {
     texts: any;
@@ -16,15 +17,13 @@ export class Language {
 
     async importTexts(lang: string): Promise<void> {
         // Deactivate if no need in dynamic import.
+        const path = `../../../../dist/lang/${lang}/lang.js`;
         try {
-            if (import.meta.env.DEV) {
-                const { texts } = await import(/* @vite-ignore */`../../../i18n/${lang}/lang`);
-                this.texts = texts;
-            } else {
-                const response = await fetch(`/lang/${lang}/lang.js`);
-                console.log(response);
-                // this.texts = response.json();
-            }
+            this.texts = import.meta.env.DEV ?
+                (await import(/* @vite-ignore */`../../../i18n/${lang}/lang`)).texts
+                : languages[path]
+                    ? (await languages[path]()).texts
+                    : console.error(`Language file not found: ${lang}`);
         } catch (err) {
             this.texts = {};
             console.error(err);

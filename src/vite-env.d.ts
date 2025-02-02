@@ -8,4 +8,5 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
     readonly env: ImportMetaEnv;
+    readonly glob: (pattern: string) => { [k: string]: () => Promise<any> };
 }

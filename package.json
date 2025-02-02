@@ -11,15 +11,16 @@
     "initiate": "git submodule update --init --recursive && git submodule foreach 'git checkout main' && npm install --recursive && git remote rm origin",
     "playground": "concurrently \"npm run -w csser watch:scss\" \"vite --open playground.html\"",
     "dev": "concurrently \"npm run -w csser watch:scss\" \"vite\"",
-    "postbuild": "node src/scripts/lang.mjs",
     "build": "npm run -w csser build:scss && vite build --emptyOutDir",
     "build-watch": "npm run -w csser build:scss && vite build --watch",
+    "postbuild": "node src/scripts/lang.mjs",
     "visualize": "npx vite-bundle-visualizer",
     "generate:sitemap": "node --experimental-strip-types --import=module ./src/services/utils/sitemap/sitemap.ts ../../../dist/"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^22.13.0",
     "concurrently": "",
     "fs": "",
     "path": "",
