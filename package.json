@@ -9,13 +9,11 @@
   "scripts": {
     "update-project": "git submodule update --recursive --remote",
     "initiate": "git submodule update --init --recursive && git submodule foreach 'git checkout main' && npm install --recursive && git remote rm origin",
-
     "playground": "concurrently \"npm run -w csser watch:scss\" \"vite --open playground.html\"",
     "dev": "concurrently \"npm run -w csser watch:scss\" \"vite\"",
-
+    "postbuild": "node src/scripts/lang.js",
     "build": "npm run -w csser build:scss && vite build --emptyOutDir",
     "build-watch": "npm run -w csser build:scss && vite build --watch",
-
     "visualize": "npx vite-bundle-visualizer",
     "generate:sitemap": "node --experimental-strip-types --import=module ./src/services/utils/sitemap/sitemap.ts ../../../dist/"
   },
@@ -23,9 +21,12 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "",
+    "fs": "",
+    "path": "",
     "typescript": "",
+    "url": "",
     "vite": "",
-    "vite-tsconfig-paths": "",
-    "vite-bundle-visualizer":""
+    "vite-bundle-visualizer": "",
+    "vite-tsconfig-paths": ""
   }
 }

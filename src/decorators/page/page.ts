@@ -3,7 +3,7 @@ import { Enlist, addMeta } from "@decorators/utils";
 import { type Navigation, State } from "@services";
 import { StateKeys } from "@constants/stateKeys.constant";
 import { LayoutType } from "@decorators/types";
-import { BasePageText } from "assets/i18n/interfaces";
+import { BasePageText } from "@i18n/interfaces";
 import { Footer } from "@shared";
 
 /**

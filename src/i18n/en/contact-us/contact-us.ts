@@ -1,6 +1,6 @@
-import { IContactUsBlock } from "@pages/contact-us/types";
-import { IFooterConfig } from "@shared/modules/footer/types";
-import { IHeaderText } from "@shared/modules/hero/components/header/lang";
+import type { IContactUsBlock } from "@pages/contact-us/types";
+import type { IFooterConfig } from "@shared/modules/footer/types";
+import type { IHeaderText } from "@shared/modules/hero/components/header/lang";
 
 export const contactus = {
     HEADER: {

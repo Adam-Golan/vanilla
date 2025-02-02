@@ -14,11 +14,17 @@ export class Language {
         return ref;
     }
 
-    async importTexts(lang: string, subPath: string = ''): Promise<void> {
+    async importTexts(lang: string): Promise<void> {
         // Deactivate if no need in dynamic import.
         try {
-            const { texts } = await import(/* @vite-ignore */`../../../assets/i18n/${lang}/lang${subPath}`);
-            this.texts = texts;
+            if (import.meta.env.DEV) {
+                const { texts } = await import(/* @vite-ignore */`../../../i18n/${lang}/lang`);
+                this.texts = texts;
+            } else {
+                const response = await fetch(`/lang/${lang}/lang.js`);
+                console.log(response);
+                // this.texts = response.json();
+            }
         } catch (err) {
             this.texts = {};
             console.error(err);

@@ -1,5 +1,5 @@
-import { IFooterConfig } from '@shared/modules/footer/types';
-import { IHeroText } from '@shared/modules/hero/lang';
+import type { IFooterConfig } from '@shared/modules/footer/types';
+import type { IHeroText } from '@shared/modules/hero/lang';
 
 export const home = {
     HERO: {
