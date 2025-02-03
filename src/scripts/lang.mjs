@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Path Configs
 const srcDir = resolve(__dirname, "../i18n");
-const outputDir = resolve(__dirname, "../../dist/lang");
+const outputDir = resolve(__dirname, "../assets/lang");
 
 async function buildLanguages(dir) {
   // Reading directory.

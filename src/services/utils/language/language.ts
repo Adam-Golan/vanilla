@@ -1,6 +1,6 @@
 // Activate if no need in dynamic import.
 // import { texts } from '../../../asstets/i18n/en/lang';
-const languages = import.meta.glob('../../../../dist/lang/*/lang.js');
+const languages = import.meta.glob('../../../assets/lang/*/lang.js');
 
 export class Language {
     texts: any;
@@ -17,7 +17,7 @@ export class Language {
 
     async importTexts(lang: string): Promise<void> {
         // Deactivate if no need in dynamic import.
-        const path = `../../../../dist/lang/${lang}/lang.js`;
+        const path = `../../../assets/lang/${lang}/lang.js`;
         try {
             this.texts = import.meta.env.DEV ?
                 (await import(/* @vite-ignore */`../../../i18n/${lang}/lang`)).texts

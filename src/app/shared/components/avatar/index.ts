@@ -12,6 +12,6 @@ export class Avatar extends HTMLElement {
         this.setAttribute('role', 'img');
         this.setAttribute('alt', 'avatar');
         this.style.width = `${width}px`;
-        this.style.backgroundImage = `url('${url}'), url('/user.svg')`;
+        this.style.backgroundImage = `url(${url}), url('./generics/user.svg')`;
     }
 }

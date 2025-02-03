@@ -7,7 +7,7 @@ export class Loader extends Component {
 
     protected init(): void {
         const img = document.createElement('img');
-        img.style.background = `url(/loader/loader.svg) no-repeat 50%`;
+        img.style.background = `url(./loader/loader.svg) no-repeat 50%`;
         this.append(img);
     }
 }
