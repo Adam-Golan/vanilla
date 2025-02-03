@@ -19,17 +19,17 @@ export const aboutus = {
     MISSION: 'Our Mission At QuantumFluff.com, we believe that innovation lives in the unexpected spaces between logic and imagination. Our journey began with a simple yet revolutionary concept: to transform the ordinary into the extraordinary, one pet video at a time. We\'re not just a technology company; we\'re pioneers of digital randomness, creators of algorithms that see beyond the conventional, and believers in the untapped potential of seemingly mundane moments. Our mission is to prove that creativity knows no bounds, that technology can be both intelligent and playful, and that sometimes the most profound insights come from watching a cat knock over a glass of milk. Our commitment is to challenge the status quo, to bring joy and unexpected wonder to the digital landscape, and to remind the world that innovation doesn\'t always look like what you expect. We\'re here to turn the ordinary into the extraordinary, one quantum moment at a time.',
     CARDS: [
         {
-            image: '/about-us/tonystark.webp',
+            image: './about-us/tonystark.webp',
             title: 'Tony Stark',
             description: 'CEO, Founder, and President'
         },
         {
-            image: '/about-us/natasharomanoff.jpg',
+            image: '/vanilla/about-us/natasharomanoff.jpg',
             title: 'Natasha Romanoff',
             description: 'CFO, Chief Financial Officer, and Treasurer'
         },
         {
-            image: '/about-us/steverogers.webp',
+            image: 'vanilla/about-us/steverogers.webp',
             title: 'Steve Rogers',
             description: 'CTO, Chief Technology Officer, and Chief Architect'
         },
