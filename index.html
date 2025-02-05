@@ -2,7 +2,10 @@
 <html lang="en">
 
   <head>
-    <base href="https://adam-golan.github.io/vanilla/">
+
+    <script>
+      if (!window.location.origin.includes('localhost')) document.write('<base href="https://adam-golan.github.io/vanilla/">');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script defer type="module" src="/src/main.ts"></script>
