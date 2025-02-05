@@ -14,6 +14,8 @@ export class Navigation {
     private i18n = new Language();
     private history: string[] = [];
     public tree: IPagesTree;
+    private homePage: string;
+    private snapshot = location.href.slice(0, location.href.lastIndexOf('/'));
 
     /**
      * Constructor for Navigation.
@@ -21,12 +23,12 @@ export class Navigation {
      * @param state The state object that handles all state changes.
      * @param ref The root element of the application.
      * @param pages The list of pages to be used in the navigation.
-     * @param homePage The path to the home page (default is '/home').
      * @param basePath The base path for all navigation (default is '/').
      */
-    constructor(private state: State, private ref: HTMLElement, private pages: IPages, private homePage = '/home', public basePath = '/') {
+    constructor(private state: State, private ref: HTMLElement, private pages: IPages, public basePath = '/') {
         this.tree = this.createTree();
         this.subscribes();
+        this.homePage = pages.keys().next().value || '/home';
     }
 
     // ------------------------------
@@ -222,7 +224,7 @@ export class Navigation {
      */
     private pushState(path: string): void {
         this.history.push(path);
-        window.history.pushState(null, '', `${this.basePath === '/' ? '' : this.basePath}${path}`);
+        window.history.pushState(null, '', `${this.snapshot}${this.basePath === '/' ? '' : this.basePath}${path}`);
     }
 
     /**
