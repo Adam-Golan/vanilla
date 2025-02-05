@@ -24,22 +24,22 @@ export const aboutus = {
             description: 'CEO, Founder, and President'
         },
         {
-            image: '/vanilla/about-us/natasharomanoff.jpg',
+            image: './about-us/natasharomanoff.jpg',
             title: 'Natasha Romanoff',
             description: 'CFO, Chief Financial Officer, and Treasurer'
         },
         {
-            image: 'vanilla/about-us/steverogers.webp',
+            image: './about-us/steverogers.webp',
             title: 'Steve Rogers',
             description: 'CTO, Chief Technology Officer, and Chief Architect'
         },
         {
-            image: '/about-us/thor.jpg',
+            image: './about-us/thor.jpg',
             title: 'Thor Odinson',
             description: 'COO, Chief Operating Officer, and Chief Marketing Officer'
         },
         {
-            image: '/about-us/peterparker.webp',
+            image: './about-us/peterparker.webp',
             title: 'Peter Parker',
             description: 'Intern, Student, and Teacher'
         }
