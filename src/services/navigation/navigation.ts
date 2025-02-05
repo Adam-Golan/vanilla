@@ -121,8 +121,7 @@ export class Navigation {
      * Calls the navigation logic with the current path.
      */
     private fisrtLoad(): void {
-        // this.history = [];
-        if (location.pathname === this.basePath) this.pushState(this.homePage);
+        this.pushState(this.homePage);
         Array.from(this.ref.children).forEach(child => !child.classList.contains('navbar') ? this.ref.removeChild(child) : null);
         this.ref.append(this.loader);
         // this.log('fisrtLoad', location.pathname);
