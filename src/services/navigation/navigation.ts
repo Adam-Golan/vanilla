@@ -15,7 +15,6 @@ export class Navigation {
     private history: string[] = [];
     public tree: IPagesTree;
     private homePage: string;
-    private snapshot = location.href.slice(0, location.href.lastIndexOf('/'));
 
     /**
      * Constructor for Navigation.
@@ -226,7 +225,7 @@ export class Navigation {
     private pushState(path: string): void {
         this.history.push(path);
         if (!location.pathname.includes(path))
-            window.history.pushState(null, '', `${this.snapshot}${this.basePath === '/' ? '' : this.basePath}${path}`);
+            window.history.pushState(null, '', `${this.basePath === '/' ? '' : this.basePath}${path}`);
     }
 
     /**
