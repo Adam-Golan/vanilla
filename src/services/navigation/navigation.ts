@@ -29,6 +29,8 @@ export class Navigation {
         this.tree = this.createTree();
         this.subscribes();
         this.homePage = pages.keys().next().value || '/home';
+        // console.log(performance);
+        // console.log(performance.getEntriesByType("navigation"));
     }
 
     // ------------------------------
@@ -121,8 +123,7 @@ export class Navigation {
      * Calls the navigation logic with the current path.
      */
     private fisrtLoad(): void {
-        if (this.snapshot === location.href.slice(0, location.href.lastIndexOf('/')))
-            this.pushState(this.homePage);
+        if ((this.snapshot.length + 1) === location.href.length) this.pushState(this.homePage);
         Array.from(this.ref.children).forEach(child => !child.classList.contains('navbar') ? this.ref.removeChild(child) : null);
         this.ref.append(this.loader);
         // this.log('fisrtLoad', location.pathname);
