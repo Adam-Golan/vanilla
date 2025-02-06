@@ -28,7 +28,7 @@ export class Navigation {
         this.tree = this.createTree();
         this.subscribes();
         this.homePage = pages.keys().next().value || '/home';
-        location.pathname.split('/').forEach(path => {
+        location.pathname.split('/').filter(Boolean).forEach(path => {
             if (!pages.has(`/${path}`)) this.basePath += `${path}/`;
         });
         // console.log(performance);
