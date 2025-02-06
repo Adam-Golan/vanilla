@@ -31,6 +31,7 @@ export class Navigation {
         location.pathname.split('/').filter(Boolean).forEach((path, idx, arr) => {
             if (!pages.has(`/${path}`)) this.basePath += `${path}${idx === arr.length - 1 ? '' : '/'}`;
         });
+        console.log(this.basePath);
         // console.log(performance);
         // console.log(performance.getEntriesByType("navigation"));
     }
