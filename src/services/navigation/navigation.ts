@@ -28,10 +28,10 @@ export class Navigation {
         this.tree = this.createTree();
         this.subscribes();
         this.homePage = pages.keys().next().value || '/home';
-        location.pathname.split('/').filter(Boolean).forEach((path, idx, arr) => {
-            if (!pages.has(`/${path}`)) this.basePath += `${path}${idx === arr.length - 1 ? '' : '/'}`;
+        location.pathname.split('/').filter(Boolean).forEach((path) => {
+            if (!pages.has(`/${path}`)) this.basePath += `${path}/`;
         });
-        console.log(this.basePath);
+        if (this.basePath.endsWith('/')) this.basePath = this.basePath.slice(0, -1);
         // console.log(performance);
         // console.log(performance.getEntriesByType("navigation"));
     }
