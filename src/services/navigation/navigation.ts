@@ -225,7 +225,8 @@ export class Navigation {
      */
     private pushState(path: string): void {
         this.history.push(path);
-        window.history.pushState(null, '', `${this.snapshot}${this.basePath === '/' ? '' : this.basePath}${path}`);
+        if (!location.pathname.includes(path))
+            window.history.pushState(null, '', `${this.snapshot}${this.basePath === '/' ? '' : this.basePath}${path}`);
     }
 
     /**
