@@ -36,7 +36,7 @@ export default defineConfig({
         const cssFile = readdirSync(join(distPath, 'assets')).find(file => file.endsWith('.css'));
         if (cssFile) {
           const html = readFileSync(resolve(__dirname, '404.html'), 'utf-8');
-          writeFileSync(join(distPath, '404.html'), html.replace('<!--CSS_INJECT-->', `<link rel="stylesheet" href="/assets/${cssFile}">`), 'utf8');
+          writeFileSync(join(distPath, '404.html'), html.replace('<!--CSS_INJECT-->', `<link rel="stylesheet" href="./assets/${cssFile}">`), 'utf8');
           console.log(`✅ 404.html updated with CSS: /assets/${cssFile}`);
         } else {
           console.warn('⚠️ No CSS file found in assets directory');
