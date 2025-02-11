@@ -2,8 +2,8 @@ import { Component, ComponentDecorator } from "@decorators";
 
 import './counter.scss';
 
-/*!important*/
 @ComponentDecorator
+/*!important*/
 export class Counter extends Component<{}> {
     _value: number = 0;
     field = this.cElem('span');
