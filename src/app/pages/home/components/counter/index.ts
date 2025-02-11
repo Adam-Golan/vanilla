@@ -2,6 +2,7 @@ import { Component, ComponentDecorator } from "@decorators";
 
 import './counter.scss';
 
+/*!important*/
 @ComponentDecorator
 export class Counter extends Component<{}> {
     _value: number = 0;
