@@ -10,6 +10,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, "../i18n");
 const outputDir = resolve(__dirname, "../assets/lang");
 
+const content = readdirSync(outputDir);
+for (const entity of content)
+  rmSync(join(outputDir, entity), { recursive: true, force: true });
+
 async function buildLanguages(dir) {
   // Reading directory.
   const files = readdirSync(dir);
