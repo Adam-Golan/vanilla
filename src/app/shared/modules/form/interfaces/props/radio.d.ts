@@ -2,6 +2,7 @@ import { Props } from "./base";
 
 export interface IRadioProps extends Omit<Props, 'placeholder' | 'autocomplete'> {
     label: string;
+    value?: string;
     values: string[];
 }
 

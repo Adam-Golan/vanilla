@@ -17,6 +17,7 @@ export class Radio extends FormComponent<IRadioProps> {
             inp.type = 'radio';
             inp.name = this.props.name;
             inp.id = inp.value = label.htmlFor = label.innerText = radio;
+            if (this.props.value === radio) inp.checked = true;
             inp.oninput = () => inp.checked ? this.onInput(inp.value) : null;
             div.append(inp, label);
             children.push(div);
