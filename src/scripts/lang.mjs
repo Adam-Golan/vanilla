@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readdirSync, writeFileSync, lstatSync, readFileSync } from "fs";
-import { resolve, dirname, join} from "path";
+import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { transpileModule, ModuleKind, ScriptTarget } from 'typescript';
 
@@ -10,9 +10,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, "../i18n");
 const outputDir = resolve(__dirname, "../assets/lang");
 
-const content = readdirSync(outputDir);
-for (const entity of content)
-  rmSync(join(outputDir, entity), { recursive: true, force: true });
+if (existsSync(outputDir)) {
+  const content = readdirSync(outputDir);
+  for (const entity of content)
+    rmSync(join(outputDir, entity), { recursive: true, force: true });
+}
 
 async function buildLanguages(dir) {
   // Reading directory.
