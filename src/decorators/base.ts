@@ -71,11 +71,13 @@ export abstract class Basis<IConfig> extends HTMLElement {
      *   - `cls` (optional): A class name to assign to the created element.
      * @returns An array of created HTML elements.
      */
-    protected cAlot(list: { tag: keyof HTMLElementTagNameMap, cls?: string }[]): HTMLElement[] {
+    protected cAlot<T extends { tag: keyof HTMLElementTagNameMap, cls?: string }[]>(
+        list: [...T]
+    ): { [I in keyof T]: T[I] extends { tag: infer K extends keyof HTMLElementTagNameMap } ? HTMLElementTagNameMap[K] : never } {
         return list.map(({ tag, cls }) => {
             const el = this.cElem(tag);
             if (cls) el.className = cls;
             return el;
-        });
+        }) as any;
     }
 }
