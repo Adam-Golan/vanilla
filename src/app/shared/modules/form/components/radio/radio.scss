@@ -1,13 +1,16 @@
 radio-component.radio {
   .form-group {
-    div {
-      display: flex;
+    * {
+      cursor: pointer;
+    }
+    label {
+      width: 2ch;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
       gap: 1ch;
       input {
         margin: 0;
-      }
-      label {
-        cursor: pointer;
       }
     }
   }
