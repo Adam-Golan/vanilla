@@ -27,7 +27,7 @@ export abstract class Basis<IConfig> extends HTMLElement {
      * @param id The id of the element to retrieve.
      * @returns The element with the given id, or null if it doesn't exist.
      */
-    protected idElem = <K extends keyof HTMLElementTagNameMap>(id: string): HTMLElementTagNameMap[K] | null => this.querySelector(`#${id}`);
+    protected idElem = <K extends keyof HTMLElementTagNameMap>(id: string): HTMLElementTagNameMap[K] | null => this.querySelector(`[id="${id}"]`);
 
     /**
      * Get elements by their "name" attribute.
