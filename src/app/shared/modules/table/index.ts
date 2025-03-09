@@ -1,6 +1,5 @@
 import { Module, ModuleDecorator } from "@decorators";
 import { ITableConfig } from "./interfaces";
-import { Row } from "./row/row";
 
 import './table.scss';
 
@@ -8,17 +7,29 @@ import './table.scss';
 export class Table extends Module<ITableConfig> {
     constructor(protected data: ITableConfig) {
         super(data);
-        this.append(new Row(this.data.columns, 'head'), ...this.createRows());
     }
 
-    // Noop.
-    protected init(): void { }
+    protected init(): void { 
+        this.createHead();
+        this.createBody();
+    }
 
-    private createRows(): Row[] {
-        return this.data.rows.map(row => {
+    private createHead(): void {
+        const [head, tr] = this.cAlot([{ tag: 'thead' }, { tag: 'tr' }]);
+        this.data.columns.forEach(col => { tr.innerHTML += (`<th>${col}</th>`) });
+        head.append(tr);
+        this.append(head);
+    }
+
+    private createBody(): void {
+        const body = this.cElem('tbody');
+        this.data.rows.forEach(row => {
+            const tr = this.cElem('tr');
             const arr = new Array(this.data.columns.length);
             for (const cell of row) arr[this.data.columns.indexOf(cell.field)] = cell.data;
-            return new Row(arr);
+            arr.forEach(cell => { tr.innerHTML += (`<td>${cell}</td>`) });
+            body.append(tr);
         });
+        this.append(body);
     }
 }
