@@ -14,4 +14,15 @@ link-component.link {
       var(--trans-color-medium);
     scale: 1.05;
   }
+  
+  &[data-disabled="true"] {
+    cursor: no-drop;
+    box-shadow: none;
+    background: var(--disabled-d-5);
+    color: var(--disabled-l-5);
+    &:hover {
+      scale: 1;
+      box-shadow: none;
+    }
+  }
 }
