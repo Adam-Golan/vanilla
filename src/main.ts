@@ -1,7 +1,7 @@
 import './style/dist/style.css';
 import './utils';
 
-import { Navigation, setMetaTags, State, setOpenGraphTags } from "@services";
+import { Navigation, setMetaTags, State, setOpenGraphTags, Preference } from "@services";
 import { Modal, Navbar } from "@shared";
 import { StateKeys } from '@constants/stateKeys.constant';
 import { appConfig } from 'app.config';
@@ -15,6 +15,7 @@ class Main {
 
   // Elements.
   constructor() {
+    this.appState.set(StateKeys.preferences, new Preference());
     setMetaTags(appConfig.meta);
     if (appConfig.OGCard) setOpenGraphTags(appConfig.OGCard);
     this.navigation.importTexts().then(_ => this.init()); // Importing application's texts.

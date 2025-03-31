@@ -7,6 +7,8 @@ const StateKeys = {
     openModal: 'openModal',
     openDialog: 'openDialog',
     closeDialog: 'closeDialog',
+
+    preferences: 'preferences'
 } as const;
 
 

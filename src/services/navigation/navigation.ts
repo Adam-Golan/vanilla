@@ -1,11 +1,11 @@
 import { Loader } from "@shared";
-import { Device } from "@services/utils/device/device";
 import { Language } from "@services/utils/language/language";
 import type { Page } from "@decorators";
 import type { State } from "@services/state/state";
 import { StateKeys } from "@constants/stateKeys.constant";
 import { IPages, IPagesTree } from "./types";
 import { appConfig } from "app.config";
+import type { Preference } from "@services/utils";
 
 export class Navigation {
     private loader = new Loader({});
@@ -88,7 +88,7 @@ export class Navigation {
      * @returns A promise that resolves once the texts have been imported and the page is initialized.
      */
     public async importTexts(): Promise<void> {
-        await this.i18n.importTexts(Device.lang);
+        await this.i18n.importTexts(await (this.state.get(StateKeys.preferences) as Preference).getLang());
         this.fisrtLoad();
     }
 
