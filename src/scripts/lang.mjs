@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readdirSync, writeFileSync, lstatSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, writeFileSync, lstatSync, readFileSync, rmSync } from "fs";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { transpileModule, ModuleKind, ScriptTarget } from 'typescript';
