@@ -6,7 +6,11 @@ export class Language {
     texts: any;
 
     getTexts(path: string): any {
-        return path.includes('/') ? this.locateTexts(path.split('/')) : this.texts[path];
+        return path.length
+            ? path.includes('/')
+                ? this.locateTexts(path.split('/'))
+                : this.texts[path]
+            : this.texts['home'];
     }
 
     private locateTexts(paths: string[]): any {
