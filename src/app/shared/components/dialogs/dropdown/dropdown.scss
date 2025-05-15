@@ -3,6 +3,7 @@
   --borderRadius: 10px;
   --borderColor: var(--color);
   --topAdjust: 0px;
+  --maxHeight: 250px;
   width: 100%;
   height: fit-content;
   max-height: 0px;
@@ -15,7 +16,7 @@
   transition: all 0.5s ease-in-out allow-discrete;
   overflow: hidden;
   &:has(dialog[open]) {
-    max-height: 250px;
+    max-height: var(--maxHeight);
     opacity: 1;
     box-shadow: 0px 2px 10px 0px var(--trans-color-low);
   }
@@ -23,6 +24,7 @@
   }
   dialog {
     width: 100%;
+    max-height: var(--maxHeight);
     background: var(--bg);
     overflow-y: auto;
     > * {
