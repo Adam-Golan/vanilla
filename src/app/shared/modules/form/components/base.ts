@@ -58,7 +58,7 @@ export abstract class FormComponent<P extends Props = Props> extends Component<P
     private setField() {
         this.field.id = this.field.name = this.props.name;
         if (this.props.placeholder?.length && !(this.field instanceof HTMLSelectElement)) this.field.placeholder = this.props.placeholder;
-        this.field.oninput = () => this.onInput(this.field.value.toLowerCase());
+        this.field.oninput = () => this.onInput(this.field.value);
         if (this.props.required) {
             this.field.addEventListener('focus', () => this.field.classList.remove('touched'));
             this.field.addEventListener('blur', () => this.field.classList.add('touched'));
