@@ -1,0 +1,10 @@
+<!-- Stylish V for Vendetta-Inspired Icon -->
+<svg width="460" height="460" viewBox="0 0 100 100" style='background-color: black;'
+    xmlns="http://www.w3.org/2000/svg">
+    <!-- Encircled V Shape -->
+    <circle cx="50" cy="50" r="45" stroke="red" stroke-width="2" fill="none" />
+    <!-- Left Curved Slash -->
+    <path d="M20,12 Q46,40 45,97" stroke="red" stroke-width="5" stroke-linecap="round" fill="none" />
+    <!-- Right Curved Slash -->
+    <path d="M85,05 Q52,45 45,97" stroke="red" stroke-width="4" stroke-linecap="round" fill="none" />
+</svg>
