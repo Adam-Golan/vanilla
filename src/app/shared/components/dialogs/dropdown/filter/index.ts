@@ -7,7 +7,7 @@ export class FilterDropdown extends SelectDropdown {
     filteredList: IOptionProps[];
 
     filter(val: string): void {
-        this.filteredList = this.list.filter(item => item.text.includes(val));
+        this.filteredList = this.list.filter(item => item.text.toLowerCase().includes(val.toLowerCase()));
         this.renderList(this.filteredList);
         this[this.filteredList.length ? 'open' : 'close']();
     }
