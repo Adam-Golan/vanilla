@@ -166,6 +166,7 @@ export class Navigation {
         path = this.findPage(path);
         // this.log('navigationLogic', path);
         document.title = `${appConfig.siteURL.replace(/(https?:\/\/|www\.)/, '').sliceTo('.').titleCase()} | ${(path).slice(1).addSpaces('-').titleCase()}`;
+        if (document.title.indexOf('|') === document.title.length - 1) document.title = document.title.replace('|', '');
         if (this.cachedPages.has(path)) {
             this.currentPage = this.cachedPages.get(path)!;
             this.ref.replaceChild(this.currentPage, this.loader);
