@@ -12,6 +12,11 @@ export class API {
     methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'CONNECT'];
     private cache: Map<string, any> = new Map();
 
+    set _cacheDuration(value: number) {
+        this.cacheDuration = value;
+        this.cache.clear();
+    }
+
     /**
      * Constructs an API instance with the specified service URL, headers, and cache duration.
      * It dynamically assigns HTTP methods to the instance for making requests.
