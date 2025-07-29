@@ -6,8 +6,7 @@ toast-component.toast {
   display: block;
   border-radius: 10px;
   background: var(--bg);
-  filter: opacity(80%);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(6px);
   transition: all 0.5s ease;
   &.body {
     position: fixed;
@@ -42,8 +41,7 @@ toast-component.toast {
   &.warn {
     --bg: var(--warning-d-3);
   }
-  &.general {
-    --bg: var(--color);
-    color: black;
+  &.default {
+    --bg: var(--trans-bg-low);
   }
 }

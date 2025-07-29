@@ -9,7 +9,7 @@ export class Toast extends HTMLElement {
         ref.append(this);
     }
     
-    showToast(msg: string, type: 'success' | 'error' | 'info' | 'warn' | 'general' = 'general'): void {
+    showToast(msg: string, type: 'success' | 'error' | 'info' | 'warn' | 'default' = 'default'): void {
         this.innerHTML = msg;
         this.className = `toast ${type} ${this.ref === document.body ? 'body' : 'el'}`;
         this.classList.add('show');
