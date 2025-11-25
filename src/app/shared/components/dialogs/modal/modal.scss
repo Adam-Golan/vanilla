@@ -6,7 +6,7 @@ dialog.modal {
   margin-inline: auto;
   padding: var(--pad);
   border-radius: var(--borderRadius);
-  background: var(--modalBg, var(--bg));
+  background: var(--bg);
   animation: fade ease 0.5s, getDown ease 0.5s;
   &::backdrop {
     background: rgba(0, 0, 0, 0.4);
