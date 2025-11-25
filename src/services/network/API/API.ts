@@ -1,16 +1,18 @@
+import { APIError, type CacheEntry, type QueryParams, type RequestPayload } from './types';
+
 export class API {
-    declare OPTIONS: <T = any>(action: string, requestHeaders?: HeadersInit) => Promise<T>;
-    declare CONNECT: <T = any>(action: string, requestHeaders?: HeadersInit) => Promise<T>;
+    declare OPTIONS: <T = unknown>(action: string, requestHeaders?: HeadersInit) => Promise<T>;
+    declare CONNECT: <T = unknown>(action: string, requestHeaders?: HeadersInit) => Promise<T>;
 
-    declare GET: <T = any>(action: string, payload?: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => Promise<T>;
-    declare POST: <T = any>(action: string, payload: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => Promise<T>;
-    declare PUT: <T = any>(action: string, payload: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => Promise<T>;
-    declare PATCH: <T = any>(action: string, payload: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => Promise<T>;
-    declare DELETE: <T = any>(action: string, payload: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => Promise<T>;
-    declare HEAD: <T = any>(action: string, payload: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => Promise<T>;
+    declare GET: <T = unknown>(action: string, requestHeaders?: HeadersInit, params?: QueryParams) => Promise<T>;
+    declare POST: <T = unknown>(action: string, payload: RequestPayload, requestHeaders?: HeadersInit, params?: QueryParams) => Promise<T>;
+    declare PUT: <T = unknown>(action: string, payload: RequestPayload, requestHeaders?: HeadersInit, params?: QueryParams) => Promise<T>;
+    declare PATCH: <T = unknown>(action: string, payload: RequestPayload, requestHeaders?: HeadersInit, params?: QueryParams) => Promise<T>;
+    declare DELETE: <T = unknown>(action: string, payload?: RequestPayload, requestHeaders?: HeadersInit, params?: QueryParams) => Promise<T>;
+    declare HEAD: <T = unknown>(action: string, requestHeaders?: HeadersInit, params?: QueryParams) => Promise<T>;
 
-    methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'CONNECT'];
-    private cache: Map<string, any> = new Map();
+    methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'CONNECT'] as const;
+    private cache: Map<string, CacheEntry<unknown>> = new Map();
 
     set _cacheDuration(value: number) {
         this.cacheDuration = value;
@@ -27,11 +29,22 @@ export class API {
     constructor(private service: string = location.origin, private headers: HeadersInit = {}, private cacheDuration: number = 1000 * 60 * 5) {
         for (const method of this.methods) {
             if (['OPTIONS', 'CONNECT'].includes(method)) {
-                (this as any)[method] = <T = any>(action: string, requestHeaders?: HeadersInit) => {
-                    return this.baseRequest<T>(action, this.createInit(method, '', requestHeaders));
+                (this as any)[method] = <T = unknown>(action: string, requestHeaders?: HeadersInit) => {
+                    return this.baseRequest<T>(action, this.createInit(method, undefined, requestHeaders));
+                };
+            } else if (['GET', 'HEAD'].includes(method)) {
+                (this as any)[method] = <T = unknown>(action: string, requestHeaders?: HeadersInit, params?: QueryParams) => {
+                    if (params) action = this.getUrl(action, params);
+                    return this.baseRequest<T>(action, this.createInit(method, undefined, requestHeaders));
+                };
+            } else if (method === 'DELETE') {
+                (this as any)[method] = <T = unknown>(action: string, payload?: RequestPayload, requestHeaders?: HeadersInit, params?: QueryParams) => {
+                    if (params) action = this.getUrl(action, params);
+                    return this.baseRequest<T>(action, this.createInit(method, payload, requestHeaders));
                 };
             } else {
-                (this as any)[method] = <T = any>(action: string, payload: string, requestHeaders?: HeadersInit, params?: { [key: string]: string }) => {
+                // POST, PUT, PATCH
+                (this as any)[method] = <T = unknown>(action: string, payload: RequestPayload, requestHeaders?: HeadersInit, params?: QueryParams) => {
                     if (params) action = this.getUrl(action, params);
                     return this.baseRequest<T>(action, this.createInit(method, payload, requestHeaders));
                 };
@@ -49,62 +62,124 @@ export class API {
      * URL as a query string.
      * @returns The URL for the request.
      */
-    private getUrl(action: string, params: { [key: string]: string }): string {
+    private getUrl(action: string, params: QueryParams): string {
         if (typeof action !== 'string') throw new Error('Action must be a string.');
         return Object.keys(params).length
-            ? `${action}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`
+            ? `${action}?${Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`).join('&')}`
             : action;
     }
 
     /**
      * Creates a RequestInit object for making HTTP requests with the specified method, payload, and headers.
-     * Throws an error if the payload is not provided for methods that require a payload.
+     * Automatically stringifies object payloads to JSON.
      *
      * @param method - The HTTP method to use for the request (e.g., 'GET', 'POST').
-     * @param payload - The request payload, used as the body of the request for methods other than 'GET', 'HEAD', and 'OPTIONS'.
+     * @param payload - The request payload, can be an object (will be stringified) or a string. Optional for GET/HEAD/OPTIONS/DELETE.
      * @param requestHeaders - Additional headers to include in the request. Default is an empty object.
      * @returns A RequestInit object configured with the specified method, headers, and body.
-     * @throws Error if the payload is not provided for requests requiring a payload.
      */
-    private createInit(method: API['methods'][number], payload: string, requestHeaders: HeadersInit = {}): RequestInit {
-        if (payload === undefined && !['GET', 'HEAD', 'OPTIONS'].includes(method)) throw new Error(`Payload is required for ${method} requests.`);
-        if (payload !== undefined && typeof payload !== 'string') throw new Error('Payload must be a string.');
+    private createInit(method: typeof this.methods[number], payload?: RequestPayload, requestHeaders: HeadersInit = {}): RequestInit {
+        const needsPayload = ['POST', 'PUT', 'PATCH'].includes(method);
+        const acceptsPayload = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
+        if (needsPayload && payload === undefined) {
+            throw new Error(`Payload is required for ${method} requests.`);
+        }
+
+        let body: string | null = null;
+        if (payload !== undefined && acceptsPayload.includes(method)) {
+            body = typeof payload === 'string' ? payload : JSON.stringify(payload);
+        }
+
         return {
             headers: { 'Content-Type': 'application/json', ...this.headers, ...requestHeaders },
             method,
-            body: method === 'GET' || method === 'HEAD' || method === 'OPTIONS' ? null : payload
-        }
+            body
+        };
     }
 
     /**
      * Makes a request to the server with the given action and RequestInit object.
      * If the request is successful, it caches the response for the given cache duration.
-     * If the request fails, it logs the error and the request details to the console.
+     * Throws an APIError with detailed information if the request fails.
      * @param action The URL for the request. The service URL is prepended to this.
      * @param init The RequestInit object to be used for the request.
-     * @returns A Promise that resolves with the response JSON or rejects with an Error.
+     * @returns A Promise that resolves with the response JSON or rejects with an APIError.
      */
-    private baseRequest<T>(action: string, init: RequestInit): Promise<T> {
+    private async baseRequest<T>(action: string, init: RequestInit): Promise<T> {
         const cacheKey = `${action}_${JSON.stringify(init)}`;
-        if (this.cache.has(cacheKey)) return Promise.resolve(this.cache.get(cacheKey));
-        return fetch(`${this.service}/${action}`, init)
-            .then(async res => {
-                if (res.ok)
-                    try {
-                        return await res.json();
-                    } catch (err) {
-                        throw { message: `Failed to parse response: ${err}` };
-                    }
-                else throw (await res.json());
-            })
-            .then(data => {
-                this.cache.set(cacheKey, data);
+
+        // Check cache (skip health checks)
+        if (!action.includes('health') && this.cache.has(cacheKey)) {
+            const cached = this.cache.get(cacheKey);
+            return Promise.resolve(cached!.data as T);
+        }
+
+        try {
+            const res = await fetch(`${this.service}/${action}`, init);
+
+            if (res.ok) {
+                let data: T;
+                try {
+                    data = await res.json();
+                } catch (err) {
+                    throw new APIError(
+                        `Failed to parse response: ${err instanceof Error ? err.message : String(err)}`,
+                        res.status,
+                        action,
+                        init.method || 'GET',
+                        err
+                    );
+                }
+
+                // Cache the response
+                this.cache.set(cacheKey, { data, timestamp: Date.now() });
                 setTimeout(() => this.cache.delete(cacheKey), this.cacheDuration);
+
                 return data;
-            })
-            .catch(err => {
-                console.error(`API ${action} request failed:\n`, `${init.method}: ${this.service}/${action}\n`, `Error: ${err}`);
+            } else {
+                // Try to get error details from response
+                let errorDetails: unknown;
+                try {
+                    errorDetails = await res.json();
+                } catch {
+                    errorDetails = { message: res.statusText };
+                }
+
+                throw new APIError(
+                    typeof errorDetails === 'object' && errorDetails !== null && 'message' in errorDetails
+                        ? String((errorDetails as any).message)
+                        : `Request failed with status ${res.status}`,
+                    res.status,
+                    action,
+                    init.method || 'GET',
+                    errorDetails
+                );
+            }
+        } catch (err) {
+            // If it's already an APIError, rethrow it
+            if (err instanceof APIError) {
+                console.error(`[API Error] ${err.method} ${this.service}/${err.action}`, {
+                    status: err.status,
+                    message: err.message,
+                    details: err.details
+                });
                 throw err;
+            }
+
+            // Network error or other issue
+            const apiError = new APIError(
+                err instanceof Error ? err.message : 'Network request failed',
+                0,
+                action,
+                init.method || 'GET',
+                err
+            );
+            console.error(`[API Error] ${apiError.method} ${this.service}/${apiError.action}`, {
+                message: apiError.message,
+                details: apiError.details
             });
+            throw apiError;
+        }
     }
 }
