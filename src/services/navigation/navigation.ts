@@ -50,14 +50,14 @@ export class Navigation {
      */
     private subscribes(): void {
         // Page Navigation.
-        this.state.subscribe(StateKeys.navigate, (path) => this.loadingProcess(path));
+        this.state.subscribe(StateKeys.navigate, (path: string) => this.loadingProcess(path));
         // Load Page.
         this.state.subscribe(`${this.basePath}:${StateKeys.contentReady}`, () => this.ref.replaceChild(this.currentPage, this.loader));
         window.addEventListener('popstate', () => {
             if (location.hash.length) return;
             this.history[this.history.length - 2]
                 ? this.loadingProcess(this.history[this.history.length - 2])
-                : this.fisrtLoad();
+                : this.firstLoad();
         });
         window.addEventListener('hashchange', () => history.replaceState(null, '', window.location.pathname));
     }
@@ -89,7 +89,7 @@ export class Navigation {
      */
     public async importTexts(): Promise<void> {
         await this.i18n.importTexts(await (this.state.get(StateKeys.preferences) as Preference).getLang());
-        this.fisrtLoad();
+        this.firstLoad();
     }
 
     /**
@@ -101,7 +101,7 @@ export class Navigation {
     */
     public setTexts(texts: any): void {
         this.i18n.texts = texts;
-        this.fisrtLoad();
+        this.firstLoad();
     }
 
     // ------------------------------
@@ -125,11 +125,11 @@ export class Navigation {
      * Appends the loader to the ref.
      * Calls the navigation logic with the current path.
      */
-    private fisrtLoad(): void {
+    private firstLoad(): void {
         this.pushState(this.findPage(location.pathname));
         Array.from(this.ref.children).forEach(child => !child.classList.contains('navbar') ? this.ref.removeChild(child) : null);
         this.ref.append(this.loader);
-        // this.log('fisrtLoad', location.pathname);
+        // this.log('firstLoad', location.pathname);
         this.navigationLogic(location.pathname);
     }
 
@@ -151,7 +151,7 @@ export class Navigation {
             this.ref.replaceChild(this.loader, this.currentPage);
             this.navigationLogic(path);
         } catch (_) {
-            this.fisrtLoad();
+            this.firstLoad();
         }
     }
 
