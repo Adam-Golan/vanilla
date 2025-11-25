@@ -5,6 +5,7 @@ const StateKeys = {
     contentReady: 'contentReady',
     // // Dialogs.
     openModal: 'openModal',
+    checkModal: 'checkModal',
     openDialog: 'openDialog',
     closeDialog: 'closeDialog',
 
