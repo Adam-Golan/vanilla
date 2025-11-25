@@ -5,6 +5,7 @@ import { Navigation, setMetaTags, State, setOpenGraphTags, Preference } from "@s
 import { Modal, Navbar } from "@shared";
 import { StateKeys } from '@constants/stateKeys.constant';
 import { appConfig } from 'app.config';
+import type { ModalPayload } from '@shared/components/dialogs/modal/types';
 
 class Main {
   // App element.
@@ -50,7 +51,11 @@ class Main {
   private subscribes(): void {
     const modals: { [key: string]: Modal } = {};
     // Modals.
-    this.appState.subscribe(StateKeys.openModal, (key: string, content: Node | string) => modals[key] = new Modal(this.app.append.bind(this.app), content, () => delete modals[key]));
+    this.appState.subscribe<ModalPayload>(StateKeys.openModal, ({ key, content }) => {
+      if (modals[key]) return;
+      this.appState.set(`${key}:${StateKeys.checkModal}`, true);
+      modals[key] = new Modal(this.app.append.bind(this.app), content, () => (delete modals[key], this.appState.set(`${key}:${StateKeys.checkModal}`, false)));
+    });
   }
 }
 
