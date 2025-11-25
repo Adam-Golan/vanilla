@@ -29,6 +29,13 @@ export class State<IState = Record<string, unknown>> {
     }
 
     /**
+     * Deletes registry by name.
+     */
+    delete(name: keyof IState): void {
+        this.delete(name);
+    }
+
+    /**
      * Clears all stored state data.
      */
     clear(): void {
