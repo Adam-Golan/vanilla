@@ -1,0 +1,1 @@
+export type ModalPayload = { key: string, content: Node | string };
