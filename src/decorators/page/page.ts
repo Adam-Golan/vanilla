@@ -60,7 +60,7 @@ export abstract class Page<IText extends BasePageText = any> extends Basis<IText
      */
     protected showPage(path = '/'): void {
         this.appState.publish(`${path}:${StateKeys.contentReady}`);
-        if (this.texts.FOOTER) {
+        if (this.texts?.FOOTER) {
             this.footer = new Footer(this.texts.FOOTER, this.appState);
             this.append(this.footer);
         }
