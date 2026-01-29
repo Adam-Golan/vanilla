@@ -13,7 +13,7 @@
     "dev": "concurrently \"npm run -w csser watch:scss\" \"vite\"",
     "prebuild": "node src/scripts/lang.mjs",
     "build": "npm run prebuild && npm run -w csser build:scss && vite build --emptyOutDir",
-    "build-watch": "npm run prebuild && npm run -w csser build:scss && vite build --watch",
+    "build-watch": "npm run prebuild && npm run -w csser build:scss && vite build --watch --emptyOutDir",
     "visualize": "npx vite-bundle-visualizer",
     "generate:sitemap": "node --experimental-strip-types --import=module ./src/services/utils/sitemap/sitemap.ts ../../../dist/"
   },
