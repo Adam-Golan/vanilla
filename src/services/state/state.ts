@@ -1,6 +1,6 @@
 import { type EventHandler, type UnsubscribeFn } from './types';
 
-export class State<IState = Record<string, unknown>> {
+export class State<IState = Record<string, any>> {
     private data: Map<keyof IState, IState[keyof IState]> = new Map();
     private subscribers: Map<string, EventHandler<unknown>[]> = new Map();
 
