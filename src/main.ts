@@ -1,7 +1,7 @@
 import './style/dist/style.css';
 import './utils';
 
-import { Navigation, setMetaTags, State, setOpenGraphTags, Preference } from "@services";
+import { Navigation, setMetaTags, State, setOpenGraphTags, Preference, Language } from "@services";
 import { Modal, Navbar } from "@shared";
 import { StateKeys } from '@constants/stateKeys.constant';
 import { appConfig } from 'app.config';
@@ -16,10 +16,13 @@ class Main {
 
   // Elements.
   constructor() {
-    this.appState.set(StateKeys.preferences, new Preference());
+    const i18n = new Language();
+    const pref = new Preference();
+    this.appState.set(StateKeys.preferences, pref);
+    this.appState.set(StateKeys.texts, i18n);
+    pref.getLang().then(lang => i18n.importTexts(lang).then(_ => this.init()));
     setMetaTags(appConfig.meta);
     if (appConfig.OGCard) setOpenGraphTags(appConfig.OGCard);
-    this.navigation.importTexts().then(_ => this.init()); // Importing application's texts.
   }
 
   /**
@@ -40,6 +43,7 @@ class Main {
    */
   private init(): void {
     document.body.append(new Navbar(this.navigation.tree, this.appState));
+    this.navigation.firstLoad();
     this.subscribes();
   }
 

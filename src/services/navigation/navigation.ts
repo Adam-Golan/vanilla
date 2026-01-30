@@ -5,13 +5,11 @@ import type { State } from "@services/state/state";
 import { StateKeys } from "@constants/stateKeys.constant";
 import { IPages, IPagesTree } from "./types";
 import { appConfig } from "app.config";
-import type { Preference } from "@services/utils";
 
 export class Navigation {
     private loader = new Loader({});
     private currentPage: Page<any>;
     private cachedPages: Map<string, Page<any>> = new Map();
-    private i18n = new Language();
     private history: string[] = [];
     public tree: IPagesTree;
     private homePage: string;
@@ -80,31 +78,6 @@ export class Navigation {
     }
 
     // ------------------------------
-    // Texts handles.
-    // ------------------------------
-    /**
-     * Imports the language texts using the device language.
-     * Initializes the page loading process after importing the texts.
-     * @returns A promise that resolves once the texts have been imported and the page is initialized.
-     */
-    public async importTexts(): Promise<void> {
-        await this.i18n.importTexts(await (this.state.get(StateKeys.preferences) as Preference).getLang());
-        this.firstLoad();
-    }
-
-    /**
-         * Sets the texts for the current page.
-         * @param texts - The texts for the current page.
-         * @remarks
-         * This method is useful when you want to set the texts for the current page manually.
-         * It will replace the current texts with the new ones and call the navigation logic to reload the page.
-    */
-    public setTexts(texts: any): void {
-        this.i18n.texts = texts;
-        this.firstLoad();
-    }
-
-    // ------------------------------
     // Loading section.
     // ------------------------------
     /**
@@ -125,7 +98,7 @@ export class Navigation {
      * Appends the loader to the ref.
      * Calls the navigation logic with the current path.
      */
-    private firstLoad(): void {
+    public firstLoad(): void {
         this.pushState(this.findPage(location.pathname));
         Array.from(this.ref.children).forEach(child => !child.classList.contains('navbar') ? this.ref.removeChild(child) : null);
         this.ref.append(this.loader);
@@ -174,7 +147,7 @@ export class Navigation {
         } else {
             const Page = this.pages.get(path)!;
             if (Page.name === this.currentPage?.constructor.name && !location.pathname.includes(path)) return;
-            const texts = this.i18n.getTexts(path.remove(/(\-|\/)/));
+            const texts = (this.state.get(StateKeys.texts) as Language).getTexts(path.remove(/(\-|\/)/));
             this.cachedPages.set(path, new Page(texts, this.state));
             this.currentPage = this.cachedPages.get(path)!;
         }
