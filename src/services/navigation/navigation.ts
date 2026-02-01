@@ -26,12 +26,7 @@ export class Navigation {
         this.tree = this.createTree();
         this.subscribes();
         this.homePage = pages.keys().next().value || '/home';
-        location.pathname.split('/').filter(Boolean).forEach((path) => {
-            if (!pages.has(`/${path}`)) this.basePath += `${path}/`;
-        });
         if (this.basePath.endsWith('/')) this.basePath = this.basePath.slice(0, -1);
-        // console.log(performance);
-        // console.log(performance.getEntriesByType("navigation"));
     }
 
     // ------------------------------
@@ -51,13 +46,7 @@ export class Navigation {
         this.state.subscribe(StateKeys.navigate, (path: string) => this.loadingProcess(path));
         // Load Page.
         this.state.subscribe(`${this.basePath}:${StateKeys.contentReady}`, () => this.ref.replaceChild(this.currentPage, this.loader));
-        window.addEventListener('popstate', () => {
-            if (location.hash.length) return;
-            this.history[this.history.length - 2]
-                ? this.loadingProcess(this.history[this.history.length - 2])
-                : this.firstLoad();
-        });
-        window.addEventListener('hashchange', () => history.replaceState(null, '', window.location.pathname));
+        window.addEventListener('popstate', () => !!location.hash ? null : this.history.at(-2) ? this.loadingProcess(this.history.at(-2)!) : this.firstLoad());
     }
 
     /**
@@ -99,6 +88,7 @@ export class Navigation {
      * Calls the navigation logic with the current path.
      */
     public firstLoad(): void {
+        if (this.basePath === location.pathname) return;
         this.pushState(this.findPage(location.pathname));
         Array.from(this.ref.children).forEach(child => !child.classList.contains('navbar') ? this.ref.removeChild(child) : null);
         this.ref.append(this.loader);
@@ -118,7 +108,9 @@ export class Navigation {
     private loadingProcess(path: string): void {
         if (path.slice(1).remove('-') === this.currentPage?.id) return;
         // this.log('loadingProcess', path);
-        path = this.searchFullPath(path) || this.homePage;
+        const slashIdx = path.lastIndexOf('/');
+        if (slashIdx && path.slice(0, slashIdx) !== this.basePath) return;
+        path = slashIdx ? path.slice(slashIdx) : this.searchFullPath(path) || this.homePage;
         this.pushState(path);
         try {
             this.ref.replaceChild(this.loader, this.currentPage);
