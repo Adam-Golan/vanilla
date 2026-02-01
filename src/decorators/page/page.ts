@@ -53,12 +53,12 @@ export abstract class Page<IText extends Record<string, any> = any> extends Basi
 
     /**
      * Shows the page after the content is ready.
-     * Publishes the `${path}:${StateKeys.contentReady}` state event.
+     * Publishes the `${basePath}:${StateKeys.contentReady}` state event.
      * If the page has a footer, creates a new Footer instance and appends it to the page.
-     * @param path - The path of the page to show. Defaults to '/'.
+     * @param basePath - The basePath of the page ancestory. Defaults to '/'.
      */
-    protected showPage(path = '/'): void {
-        this.appState.publish(`${path}:${StateKeys.contentReady}`);
+    protected showPage(basePath = '/'): void {
+        this.appState.publish(`${basePath}:${StateKeys.contentReady}`);
         if (this.texts?.FOOTER) {
             this.footer = new Footer(this.texts.FOOTER, this.appState);
             this.append(this.footer);
