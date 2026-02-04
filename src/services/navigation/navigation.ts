@@ -9,7 +9,6 @@ import { appConfig } from "app.config";
 export class Navigation {
     private loader = new Loader({});
     private currentPage: Page<any>;
-    private cachedPages: Map<string, Page<any>> = new Map();
     private history: string[] = [];
     public tree: IPagesTree;
     private homePage: string;
@@ -42,11 +41,16 @@ export class Navigation {
      * Hashchange - listen to the hashchange event and replace the state with the new path.
      */
     private subscribes(): void {
+        const splitPath = () => location.pathname.split('/').filter(Boolean);
         // Page Navigation.
         this.state.subscribe(StateKeys.navigate, (path: string) => this.loadingProcess(path));
         // Load Page.
-        this.state.subscribe(`${this.basePath}:${StateKeys.contentReady}`, () => this.ref.replaceChild(this.currentPage, this.loader));
-        window.addEventListener('popstate', () => !!location.hash ? null : this.history.at(-2) ? this.loadingProcess(this.history.at(-2)!) : this.firstLoad());
+        this.state.subscribe(`${this.basePath}:${StateKeys.contentReady}`, () => !this.basePath.length && splitPath().length > 1 ? null : this.currentPage ? this.ref.replaceChild(this.currentPage, this.loader) : null);
+        window.addEventListener('popstate', () => {
+            if (!!location.hash) return;
+            if (this.basePath === location.pathname) return;
+            this.loadingProcess(location.pathname);
+        });
     }
 
     /**
@@ -76,8 +80,8 @@ export class Navigation {
      * This method is useful when you want to reload the page without pushing a new state to the browser's history.
      */
     public reload(): void {
-        this.ref.replaceChild(this.loader, this.currentPage);
-        this.navigationLogic(location.pathname);
+        this.ref.replaceChildren(this.loader);
+        this.navigationLogic();
     }
 
     /**
@@ -86,14 +90,13 @@ export class Navigation {
      * Removes all children of the ref element except the navbar.
      * Appends the loader to the ref.
      * Calls the navigation logic with the current path.
-     */
+    */
     public firstLoad(): void {
         if (this.basePath === location.pathname) return;
-        this.pushState(this.findPage(location.pathname));
         Array.from(this.ref.children).forEach(child => !child.classList.contains('navbar') ? this.ref.removeChild(child) : null);
-        this.ref.append(this.loader);
+        this.ref.replaceChildren(this.loader);
         // this.log('firstLoad', location.pathname);
-        this.navigationLogic(location.pathname);
+        this.navigationLogic();
     }
 
     /**
@@ -106,18 +109,12 @@ export class Navigation {
      * @param path - The path to navigate to.
      */
     private loadingProcess(path: string): void {
-        if (path.slice(1).remove('-') === this.currentPage?.id) return;
-        // this.log('loadingProcess', path);
         const slashIdx = path.lastIndexOf('/');
-        if (slashIdx && path.slice(0, slashIdx) !== this.basePath) return;
+        if (!this.tree.includes(path.slice(slashIdx))) return;
         path = slashIdx ? path.slice(slashIdx) : this.searchFullPath(path) || this.homePage;
-        this.pushState(path);
-        try {
-            this.ref.replaceChild(this.loader, this.currentPage);
-            this.navigationLogic(path);
-        } catch (_) {
-            this.firstLoad();
-        }
+        // this.log('loadingProcess', path);
+        this.ref.replaceChildren(this.loader);
+        this.navigationLogic(path);
     }
 
     /**
@@ -127,22 +124,16 @@ export class Navigation {
      * of the page and caches it.
      * @param path - The path to navigate to.
      */
-    private navigationLogic(path: string): void {
+    private navigationLogic(path = location.pathname): void {
         path = this.findPage(path);
-        // this.log('navigationLogic', path);
         document.title = `${appConfig.siteURL.replace(/(https?:\/\/|www\.)/, '').sliceTo('.').titleCase()} | ${(path).slice(1).addSpaces('-').titleCase()}`;
         if (document.title.indexOf('|') === document.title.length - 1) document.title = document.title.replace('|', '');
-        if (this.cachedPages.has(path)) {
-            this.currentPage = this.cachedPages.get(path)!;
-            this.ref.replaceChild(this.currentPage, this.loader);
-            if (this.currentPage.navigation) this.currentPage.navigation.reload();
-        } else {
-            const Page = this.pages.get(path)!;
-            if (Page.name === this.currentPage?.constructor.name && !location.pathname.includes(path)) return;
-            const texts = (this.state.get(StateKeys.texts) as Language).getTexts(path.remove(/(\-|\/)/));
-            this.cachedPages.set(path, new Page(texts, this.state));
-            this.currentPage = this.cachedPages.get(path)!;
-        }
+        const Page = this.pages.get(path)!;
+        if (this.currentPage && Page.name === this.currentPage.constructor.name && !location.pathname.includes(path)) return;
+        const texts = (this.state.get(StateKeys.texts) as Language).getTexts(path.remove(/(\-|\/)/));
+        this.currentPage = new Page(texts, this.state);
+        // this.log('navigationLogic', path);
+        this.pushState(path);
     }
 
     // ------------------------------
@@ -178,7 +169,7 @@ export class Navigation {
      * @returns The first matching sub-path from the pages or the home page
      *          if no match is found or if the path equals the base path.
      */
-    private findPage(path: string): string {
+    private findPage(path = location.pathname): string {
         // this.log('findPage', path);
         if (path === this.basePath) return this.homePage;
         const pathArr = path.slice(1).split('/');
@@ -193,9 +184,11 @@ export class Navigation {
      * @param path - The path to push to the navigation history.
      */
     private pushState(path: string): void {
-        this.history.push(path);
-        if (!location.pathname.includes(path))
-            window.history.pushState(null, '', `${this.basePath === '/' ? '' : this.basePath}${path}`);
+        if (path.endsWith('/')) path = path.slice(0, -1);
+        if (!location.pathname.includes(path)) {
+            this.history.push(path);
+            window.history.pushState(null, '', this.basePath.length ? `${location.pathname}${path}` : path);
+        }
     }
 
     /**
