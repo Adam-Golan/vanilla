@@ -14,7 +14,7 @@ export function PageDecorator(target: CustomElementConstructor) {
     Enlist('page', target);
 }
 
-export abstract class Page<IText extends Record<string, any> = any> extends Basis<IText> {
+export abstract class Page<IText extends Record<string, any>> extends Basis<IText> {
     // Creating a page's state.
     state = new State();
     // Declaring layout type.
